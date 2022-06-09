@@ -59,12 +59,13 @@ modulate = Color( 1, 1, 1, 0.329412 )
 position = Vector2( 3, 14 )
 scale = Vector2( 0.833333, 0.833333 )
 frames = SubResource( 3 )
+frame = 4
 playing = true
 
 [node name="sprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 2 )
 animation = "pony_walking"
-frame = 4
+frame = 3
 playing = true
 
 [node name="collider" type="CollisionShape2D" parent="."]
