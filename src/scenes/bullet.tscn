@@ -35,9 +35,14 @@ script = ExtResource( 3 )
 [node name="sprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 4 )
 animation = "pegasus_bullet"
+frame = 1
 playing = true
 
 [node name="collider" type="CollisionShape2D" parent="."]
 shape = SubResource( 5 )
 
+[node name="visibilitynot" type="VisibilityNotifier2D" parent="."]
+scale = Vector2( 0.25, 0.2 )
+
 [connection signal="area_entered" from="." to="." method="_on_bullet_area_entered"]
+[connection signal="screen_exited" from="visibilitynot" to="." method="_on_visibilitynot_screen_exited"]

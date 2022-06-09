@@ -7,8 +7,13 @@ var total_shoot_cooldown = 0.3
 #types: pony, unicorn, pegasus
 var type = "pony"
 var bullet = preload("res://scenes/bullet.tscn")
+var screensize = OS.window_size
+var player_number = 0
 
-func _ready():
+func initialize(_type, _player_number):
+	position = Vector2(screensize.x / 2, (screensize.y / 2) + (20 * (_player_number - 1)))
+	player_number = _player_number
+	type = _type	
 	$sprite.animation = type + "_walking"
 	
 func shoot():
@@ -24,22 +29,27 @@ func _physics_process(delta):
 		shoot()
 		shoot_cooldown = total_shoot_cooldown
 	
-	if Input.is_action_pressed("down"):
+	if Input.is_action_pressed("down" + str(player_number)):
 		position.y += _speed * delta
 		moving = true
 		
-	elif Input.is_action_pressed("up"):
+	elif Input.is_action_pressed("up" + str(player_number)):
 		position.y -= _speed * delta
 		moving = true
 		
-	elif Input.is_action_pressed("left"):
+	elif Input.is_action_pressed("left" + str(player_number)):
 		$sprite.scale.x = -1
 		face_dir = "L"
 		position.x -= _speed * delta
 		moving = true
 		
-	elif Input.is_action_pressed("right"):
+	elif Input.is_action_pressed("right" + str(player_number)):
 		$sprite.scale.x = 1
 		face_dir = "R"
 		position.x += _speed * delta
 		moving = true
+		
+	position.x = clamp(position.x, 0, screensize.x)
+	position.y = clamp(position.y, 0, screensize.y)
+
+	#z_index = -position.y
