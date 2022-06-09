@@ -43,7 +43,7 @@ script = ExtResource( 9 )
 
 [node name="sprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 2 )
-animation = "pegasus_walking"
+animation = "pony_walking"
 frame = 3
 playing = true
 

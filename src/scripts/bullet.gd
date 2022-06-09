@@ -1,12 +1,12 @@
 extends Area2D
-export var speed : = 100.0
+export var speed : = 300.0
 var objettype = "gun"
 
 func _ready():
 	pass
 	
-func init_normal(face_dir):
-	$sprite.animation = "default"
+func init_normal(face_dir, type):
+	$sprite.animation = type + "_bullet"
 	if face_dir == "L":
 		rotation_degrees = 180
 	if face_dir == "R": 
