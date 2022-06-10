@@ -19,7 +19,8 @@ func initialize(_type, _player_number):
 func shoot():
 	var w = bullet.instance()
 	get_parent().add_child(w)
-	w.set_position(position)
+	var pos = get_node("pos_" + type).position
+	w.set_position(to_global(pos))
 	w.init_normal(face_dir, type)
 	
 func _physics_process(delta):	
@@ -38,13 +39,13 @@ func _physics_process(delta):
 		moving = true
 		
 	elif Input.is_action_pressed("left" + str(player_number)):
-		$sprite.scale.x = -1
+		scale.x = -1
 		face_dir = "L"
 		position.x -= _speed * delta
 		moving = true
 		
 	elif Input.is_action_pressed("right" + str(player_number)):
-		$sprite.scale.x = 1
+		scale.x = 1
 		face_dir = "R"
 		position.x += _speed * delta
 		moving = true
