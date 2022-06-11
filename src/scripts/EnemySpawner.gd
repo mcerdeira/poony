@@ -1,7 +1,7 @@
 extends Node
 var big_coin = preload("res://scenes/big_coin.tscn")
 var coin = preload("res://scenes/coin.tscn")
-var coin_cooldown_total = 2
+var coin_cooldown_total = 3
 var big_coin_cooldown_total = 300
 var coin_cooldown = coin_cooldown_total
 var big_coin_cooldown = big_coin_cooldown_total
@@ -31,7 +31,7 @@ func spawn_big_coins():
 func spawn_coins():
 	if coin_cooldown <= 0:
 		coin_cooldown = coin_cooldown_total
-		var coins = 5 + (randi() % 10)
+		var coins = 3 + (randi() % 5)
 		
 		var options = ["L","R","U","D"]
 		var rand_index:int = randi() % options.size()

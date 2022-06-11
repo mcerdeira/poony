@@ -10,10 +10,9 @@ func _physics_process(delta):
 	z_index = position.y
 
 func _on_big_coin_area_entered(area):
-	pass
-#	if area.objettype == "player":
-#		##TODO
-#		queue_free()
+	if area.objettype == "player":
+		area.transform("boxer")
+		queue_free()
 
 
 func _on_visibility_screen_exited():

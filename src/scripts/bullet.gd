@@ -1,11 +1,16 @@
 extends Area2D
-export var speed : = 300.0
+export var speed : = 600
 var objettype = "gun"
+var ttl = 0.2
 
 func _ready():
 	pass
 	
-func init_normal(face_dir, type):
+func init_normal(face_dir, type, super = false):
+	if super:
+		ttl = 0.5
+		scale *= 2
+	
 	$sprite.animation = type + "_bullet"
 	if face_dir == "L":
 		rotation_degrees = 180
@@ -17,7 +22,10 @@ func init_normal(face_dir, type):
 		rotation_degrees = 90
 
 func _physics_process(delta):
+	ttl -= 1 * delta
 	position += transform.x * speed * delta
+	if ttl <= 0:
+		queue_free()
 
 func _on_bullet_area_entered(area):
 	if area.objettype == "enemy":

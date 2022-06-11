@@ -9,17 +9,19 @@ func _ready():
 	var g = players_obj.new()
 	g.player_number = 1
 	g.type = "pony"
+	g.player_name = "Martin"
 	players.append(g);
 	
 	g = players_obj.new()
 	g.player_number = 2
 	g.type = "pegasus"
+	g.player_name = "Emma"
 	players.append(g);
 	
 	for i in range(players.size()):
 		var w = player.instance()
 		add_child(w)
-		w.initialize(players[i].type, players[i].player_number)
+		w.initialize(players[i].type, players[i].player_number, players[i].player_name)
 
 func _input(event):
 	if event.is_action_pressed("toggle_fullscreen"):
