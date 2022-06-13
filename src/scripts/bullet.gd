@@ -29,8 +29,9 @@ func _physics_process(delta):
 
 func _on_bullet_area_entered(area):
 	if area.objettype == "enemy":
-		area.queue_free()
-		queue_free()
+		pass
+		#area.queue_free()
+		#queue_free()
 
 func _on_visibilitynot_screen_exited():
 	queue_free()

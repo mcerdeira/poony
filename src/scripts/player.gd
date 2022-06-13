@@ -26,7 +26,8 @@ var coins = 0
 var coin_transform = 15
 
 func initialize(_type, _player_number, _player_name):
-	position = Vector2(screensize.x / 2, (screensize.y / 2) + (20 * (_player_number - 1)))
+	var sc = get_viewport_rect().size
+	position = Vector2(sc.x / 2, (sc.y / 2) + (20 * (_player_number - 1)))
 	player_number = _player_number
 	player_name = _player_name
 	type = _type	

@@ -4,6 +4,9 @@ var player = preload("res://scenes/player.tscn")
 var players_obj = preload("res://scripts/players.gd")
 
 func _ready():
+	initialize()
+
+func initialize():
 	var players = []
 	
 	var g = players_obj.new()
