@@ -24,6 +24,15 @@ var player_number = 0
 var player_name = ""
 var coins = 0
 var coin_transform = 15
+var hit_ttl = 0
+var life = 50
+
+func hit():
+	if !transformed:
+		life -= 1
+		hit_ttl = 1
+		if life <= 0:
+			pass
 
 func initialize(_type, _player_number, _player_name):
 	var sc = get_viewport_rect().size
@@ -35,12 +44,20 @@ func initialize(_type, _player_number, _player_name):
 	$name_label.text = player_name
 	
 func transform(what):
+	hit_ttl = 0
 	$sprite.animation = what
 	$sprite.speed_scale = 3
 	extra_speed = 200
 	transformed_what = what
 	transformed = true
 	transformed_ttl = total_transformed_ttl
+	
+func get_coin(n):
+	if transformed_ttl:
+		if transformed_what == "super_chomp":
+			transformed_ttl += n
+	else:
+		coins += n
 	
 func shoot():
 	if !transformed and !super_shoot:
@@ -60,6 +77,12 @@ func supershoot():
 	
 func _physics_process(delta):
 	var moving = false
+	if hit_ttl > 0:
+		hit_ttl -= 1 * delta
+		$sprite.material.set_shader_param("white", true)
+		if hit_ttl <= 0:
+			$sprite.material.set_shader_param("white", false)
+	
 	if coins >= coin_transform:
 		coins = 0
 		transform("super_chomp")

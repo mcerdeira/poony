@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/EnemySpawner.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/Main.gd" type="Script" id=2]
 [ext_resource path="res://scenes/ParallaxBackground.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/enemy.tscn" type="PackedScene" id=4]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 2 )
@@ -13,16 +12,16 @@ script = ExtResource( 2 )
 [node name="ParallaxBackground" parent="." instance=ExtResource( 3 )]
 
 [node name="big_coin_pos1" type="Position2D" parent="."]
-position = Vector2( 542, 42 )
+position = Vector2( 626, 43 )
 
 [node name="big_coin_pos2" type="Position2D" parent="."]
-position = Vector2( 633, 69 )
+position = Vector2( 717, 70 )
 
 [node name="big_coin_pos3" type="Position2D" parent="."]
-position = Vector2( 539, 231 )
+position = Vector2( 623, 232 )
 
 [node name="big_coin_pos4" type="Position2D" parent="."]
-position = Vector2( 578, 169 )
+position = Vector2( 662, 170 )
 
 [node name="coin_D" type="Position2D" parent="."]
 position = Vector2( 276, -13 )
@@ -34,19 +33,37 @@ position = Vector2( 264, 304 )
 position = Vector2( -21, 138 )
 
 [node name="coin_L" type="Position2D" parent="."]
-position = Vector2( 513, 128 )
+position = Vector2( 607, 133 )
 
-[node name="enemy2" parent="." instance=ExtResource( 4 )]
-position = Vector2( 269, 231 )
-total_cooldown = 0.1
-style = "mr_T"
+[node name="enemy_pos1" type="Position2D" parent="."]
+position = Vector2( 496, 16 )
 
-[node name="enemy4" parent="." instance=ExtResource( 4 )]
-position = Vector2( 109, 54 )
-total_cooldown = 0.1
-style = "mr_T"
+[node name="enemy_pos2" type="Position2D" parent="."]
+position = Vector2( 496, 48 )
 
-[node name="enemy3" parent="." instance=ExtResource( 4 )]
-position = Vector2( 417, 54 )
-total_cooldown = 0.1
-style = "mr_T"
+[node name="enemy_pos3" type="Position2D" parent="."]
+position = Vector2( 496, 80 )
+
+[node name="enemy_pos4" type="Position2D" parent="."]
+position = Vector2( 496, 112 )
+
+[node name="enemy_pos5" type="Position2D" parent="."]
+position = Vector2( 496, 144 )
+
+[node name="enemy_pos6" type="Position2D" parent="."]
+position = Vector2( 496, 176 )
+
+[node name="enemy_pos7" type="Position2D" parent="."]
+position = Vector2( 496, 208 )
+
+[node name="enemy_pos8" type="Position2D" parent="."]
+position = Vector2( 496, 240 )
+
+[node name="rotator_patA1" type="Position2D" parent="."]
+position = Vector2( 48, 40 )
+
+[node name="rotator_patA2" type="Position2D" parent="."]
+position = Vector2( 192, 232 )
+
+[node name="rotator_patA3" type="Position2D" parent="."]
+position = Vector2( 352, 40 )

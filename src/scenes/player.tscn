@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://sprites/pony3.png" type="Texture" id=1]
 [ext_resource path="res://sprites/pony5.png" type="Texture" id=2]
@@ -34,18 +34,31 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="Shader" id=5]
+code = "shader_type canvas_item;
+uniform bool white;
+
+void fragment()
+{
+	vec4 color = texture(TEXTURE, UV);
+	
+	if (white)
+	{
+		COLOR = vec4(1, 1, 1, color.a);
+	}
+	else
+	{
+		COLOR = color;
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=6]
+resource_local_to_scene = true
+shader = SubResource( 5 )
+shader_param/white = false
+
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [ ExtResource( 24 ), ExtResource( 23 ), ExtResource( 25 ), ExtResource( 23 ) ],
-"loop": true,
-"name": "super_chomp",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 1 ), ExtResource( 3 ), ExtResource( 2 ) ],
-"loop": true,
-"name": "pony_walking",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ) ],
 "loop": true,
 "name": "unicorn_walking",
@@ -54,6 +67,16 @@ animations = [ {
 "frames": [ ExtResource( 7 ), ExtResource( 8 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 6 ) ],
 "loop": true,
 "name": "pegasus_walking",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 1 ), ExtResource( 3 ), ExtResource( 2 ) ],
+"loop": true,
+"name": "pony_walking",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 24 ), ExtResource( 23 ), ExtResource( 25 ), ExtResource( 23 ) ],
+"loop": true,
+"name": "super_chomp",
 "speed": 5.0
 } ]
 
@@ -72,13 +95,14 @@ modulate = Color( 1, 1, 1, 0.329412 )
 position = Vector2( 3, 14 )
 scale = Vector2( 0.833333, 0.833333 )
 frames = SubResource( 3 )
-frame = 1
+frame = 4
 playing = true
 
 [node name="sprite" type="AnimatedSprite" parent="."]
+material = SubResource( 6 )
 frames = SubResource( 2 )
-animation = "super_chomp"
-frame = 1
+animation = "pegasus_walking"
+frame = 3
 playing = true
 
 [node name="collider" type="CollisionShape2D" parent="."]

@@ -2,11 +2,13 @@ extends Area2D
 export var speed : = 600
 var objettype = "gun"
 var ttl = 0.2
+var is_super = false
 
 func _ready():
 	pass
 	
 func init_normal(face_dir, type, super = false):
+	is_super = super
 	if super:
 		ttl = 0.5
 		scale *= 2
@@ -29,9 +31,8 @@ func _physics_process(delta):
 
 func _on_bullet_area_entered(area):
 	if area.objettype == "enemy":
-		pass
-		#area.queue_free()
-		#queue_free()
+		area.hit(is_super)
+		queue_free()
 
 func _on_visibilitynot_screen_exited():
 	queue_free()

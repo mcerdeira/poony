@@ -40,7 +40,7 @@ func _physics_process(delta):
 
 func _on_coin_area_entered(area):
 	if area.objettype == "player":
-		area.coins += 1
+		area.get_coin(1)
 		queue_free()
 
 func _on_visibility_screen_exited():

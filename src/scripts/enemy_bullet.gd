@@ -13,3 +13,9 @@ func _physics_process(delta):
 
 func _on_visibilitynot_screen_exited():
 	queue_free()
+
+
+func _on_enemy_bullet_area_entered(area):
+	if area.objettype == "player":
+		area.hit()
+		queue_free()

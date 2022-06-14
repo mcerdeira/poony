@@ -29,4 +29,5 @@ shape = SubResource( 1 )
 [node name="visibilitynot" type="VisibilityNotifier2D" parent="."]
 scale = Vector2( 0.25, 0.2 )
 
+[connection signal="area_entered" from="." to="." method="_on_enemy_bullet_area_entered"]
 [connection signal="screen_exited" from="visibilitynot" to="." method="_on_visibilitynot_screen_exited"]
