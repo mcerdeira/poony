@@ -25,15 +25,27 @@ func initialize(pos, dir, idx, randomX, randomY):
 	if direction == "U" or direction == "D":
 		position.x = randomX
 
+func get_players():
+	return get_tree().get_nodes_in_group("players")
+
 func _physics_process(delta):
-	if direction == "L":
-		position.x -= speed * delta
-	if direction == "R":
-		position.x += speed * delta
-	if direction == "U":
-		position.y -= speed * delta
-	if direction == "D":
-		position.y += speed * delta
+	var pl = get_players()
+	var magnetic = false
+	for p in pl:
+		if position.distance_to(p.position) <= 60:
+			position = position.move_toward(p.position , delta * (speed * 2))
+			magnetic = true
+			break
+	
+	if !magnetic:
+		if direction == "L":
+			position.x -= speed * delta
+		if direction == "R":
+			position.x += speed * delta
+		if direction == "U":
+			position.y -= speed * delta
+		if direction == "D":
+			position.y += speed * delta
 		
 	z_index = position.y
 

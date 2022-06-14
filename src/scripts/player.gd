@@ -13,6 +13,9 @@ var transformed = false
 var transformed_ttl = 0
 var total_transformed_ttl = 10
 var transformed_what = ""
+var parry_ttl = 0
+var horse_of_fire = false
+var horse_of_fire_ttl = 0
 
 var shoot_cooldown = 0
 var total_shoot_cooldown = 0.1
@@ -28,13 +31,15 @@ var hit_ttl = 0
 var life = 50
 
 func hit():
-	if !transformed:
+	if hit_ttl <= 0 and !transformed and !horse_of_fire:
 		life -= 1
 		hit_ttl = 1
 		if life <= 0:
 			pass
 
-func initialize(_type, _player_number, _player_name):
+func initialize(_type, _player_number, _player_name):	
+	add_to_group("players")
+	
 	var sc = get_viewport_rect().size
 	position = Vector2(sc.x / 2, (sc.y / 2) + (20 * (_player_number - 1)))
 	player_number = _player_number
@@ -44,6 +49,11 @@ func initialize(_type, _player_number, _player_name):
 	$name_label.text = player_name
 	
 func transform(what):
+	if what == "super_chomp":
+		$shadow.position.y += 20
+		$collider.disabled = true
+		$collider_chomp.disabled = false
+		
 	hit_ttl = 0
 	$sprite.animation = what
 	$sprite.speed_scale = 3
@@ -55,7 +65,9 @@ func transform(what):
 func get_coin(n):
 	if transformed_ttl:
 		if transformed_what == "super_chomp":
-			transformed_ttl += n
+			var sc = rand_range(0, 3)
+			if sc == 0:
+				transformed_ttl += n
 	else:
 		coins += n
 	
@@ -69,6 +81,7 @@ func shoot():
 	
 func supershoot():
 	if !transformed:
+		$sprite.material.set_shader_param("applyrainbow", true)
 		var w = bullet.instance()
 		get_parent().add_child(w)
 		var pos = get_node("pos_" + type).position
@@ -79,7 +92,8 @@ func _physics_process(delta):
 	var moving = false
 	if hit_ttl > 0:
 		hit_ttl -= 1 * delta
-		$sprite.material.set_shader_param("white", true)
+		if !super_shoot:
+			$sprite.material.set_shader_param("white", true)
 		if hit_ttl <= 0:
 			$sprite.material.set_shader_param("white", false)
 	
@@ -106,6 +120,12 @@ func _physics_process(delta):
 			
 		transformed_ttl -= 1 * delta
 		if transformed_ttl <= 0:
+			if transformed_what == "super_chomp":
+				$collider.disabled = false
+				$collider_chomp.disabled = true
+				$shadow.position.y -= 20
+				extra_speed = 0
+				
 			scale.x = face_num
 			scale.y = 1
 			$sprite.speed_scale = 1
@@ -117,6 +137,7 @@ func _physics_process(delta):
 		supershoot()
 		super_shoot_ttl -= 1 * delta
 		if super_shoot_ttl <= 0:
+			$sprite.material.set_shader_param("applyrainbow", false)
 			super_shoot = false
 			super_shoot_ttl = total_super_shoot_ttl
 	
@@ -132,7 +153,30 @@ func _physics_process(delta):
 		super_shoot_ttl = total_super_shoot_ttl
 		super_shoot = true
 	
-	if Input.is_action_pressed("down" + str(player_number)):		
+	if horse_of_fire:
+		horse_of_fire_ttl -= 1 * delta
+		if horse_of_fire_ttl <= 0:
+			extra_speed = 0
+			$sprite.material.set_shader_param("dooutline", false)
+			horse_of_fire_ttl = 0
+			horse_of_fire = false
+		
+	if !horse_of_fire and !transformed and parry_ttl <= 0 and hit_ttl <= 0:
+		if Input.is_action_pressed("parry" + str(player_number)):
+			parry_ttl = 0.2
+			$collider.disabled = true
+			$collider_chomp.disabled = false
+			
+	if parry_ttl > 0:
+		parry_ttl -= 1 * delta
+		$sprite.rotation_degrees -= 1000 * delta
+		if parry_ttl <= 0:
+			$sprite.rotation_degrees = 0
+			$collider.disabled = false
+			$collider_chomp.disabled = true
+			parry_ttl = 0
+	
+	if Input.is_action_pressed("down" + str(player_number)):
 		position.y += (_speed + extra_speed) * delta
 		moving = true
 		
@@ -160,3 +204,24 @@ func _physics_process(delta):
 	position.y = clamp(position.y, 0, screensize.y)
 
 	z_index = position.y
+
+func success_parry():
+	$sprite.material.set_shader_param("dooutline", true)
+	horse_of_fire = true
+	horse_of_fire_ttl = 6
+	extra_speed = 100
+
+func _on_player_area_entered(area):
+	if area.objettype == "enemybullet":
+		if parry_ttl > 0:
+			area.queue_free()
+			success_parry()
+		
+	elif area.objettype == "enemy":
+		if transformed:
+			area.queue_free()
+		else:
+			if parry_ttl > 0:
+				success_parry()
+			else:
+				hit()

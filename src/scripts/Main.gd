@@ -15,11 +15,11 @@ func initialize():
 	g.player_name = "Martin"
 	players.append(g);
 	
-	g = players_obj.new()
-	g.player_number = 2
-	g.type = "pegasus"
-	g.player_name = "Emma"
-	players.append(g);
+#	g = players_obj.new()
+#	g.player_number = 2
+#	g.type = "pegasus"
+#	g.player_name = "Emma"
+#	players.append(g);
 	
 	for i in range(players.size()):
 		var w = player.instance()

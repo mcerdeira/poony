@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://sprites/enemy2.png" type="Texture" id=1]
 [ext_resource path="res://sprites/enemy1.png" type="Texture" id=2]
@@ -7,6 +7,15 @@
 [ext_resource path="res://sprites/enemy_rot2.png" type="Texture" id=5]
 [ext_resource path="res://sprites/enemy_T1.png" type="Texture" id=6]
 [ext_resource path="res://sprites/enemy_T2.png" type="Texture" id=7]
+[ext_resource path="res://sprites/shadow4.png" type="Texture" id=8]
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ ExtResource( 8 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
 
 [sub_resource type="Shader" id=3]
 code = "shader_type canvas_item;
@@ -55,6 +64,13 @@ radius = 6.08276
 [node name="enemy" type="Area2D"]
 script = ExtResource( 3 )
 
+[node name="shadow" type="AnimatedSprite" parent="."]
+modulate = Color( 1, 1, 1, 0.329412 )
+position = Vector2( 0, 8 )
+scale = Vector2( 0.364583, 0.833333 )
+frames = SubResource( 5 )
+playing = true
+
 [node name="sprite" type="AnimatedSprite" parent="."]
 material = SubResource( 4 )
 frames = SubResource( 2 )
@@ -72,5 +88,6 @@ position = Vector2( -6, 0 )
 [node name="bullet_spawn_mr_T" type="Position2D" parent="."]
 
 [node name="visibilitynot" type="VisibilityNotifier2D" parent="."]
+scale = Vector2( 0.55, 0.65 )
 
 [connection signal="screen_exited" from="visibilitynot" to="." method="_on_visibilitynot_screen_exited"]

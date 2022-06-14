@@ -35,7 +35,6 @@ script = ExtResource( 3 )
 [node name="sprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 4 )
 animation = "pegasus_bullet"
-frame = 1
 playing = true
 
 [node name="collider" type="CollisionShape2D" parent="."]

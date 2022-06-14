@@ -6,12 +6,15 @@ var cooldown = total_cooldown
 var direction = 180
 var speed = 20
 var objettype = "enemy"
-var life = 20
+var life = 10
 var hit_ttl = 0
 var shoot_paused = false
 var node_dest = null
 var shoot_timer = 0
 var go_home = false
+
+func get_count_in_group(style):
+	return get_tree().get_nodes_in_group(style + "_group").size()
 
 func initialize(pos, _style, _node_dest = null, _speed_boost = 0):
 	node_dest = _node_dest
@@ -20,6 +23,7 @@ func initialize(pos, _style, _node_dest = null, _speed_boost = 0):
 	
 	add_to_group(style + "_group")
 	if style == "mr_T":
+		life = 999999999999999999
 		speed = 100 + _speed_boost
 		total_cooldown = 0.1
 		position.y = node_dest.position.y
@@ -27,6 +31,8 @@ func initialize(pos, _style, _node_dest = null, _speed_boost = 0):
 		shoot_timer = 5
 	elif style == "rotator":
 		total_cooldown = 0.2
+	elif style == "normal":
+		total_cooldown = 1.5
 
 func hit(super):
 	hit_ttl = 1
@@ -51,13 +57,14 @@ func shoot(delta):
 				w.initialize(direction)
 		
 	else:
-		var w = bullet.instance()
-		get_parent().add_child(w)
-		var pos = get_node("bullet_spawn_" + style).position
-		w.set_position(to_global(pos))
-		w.initialize(direction)
-		if style == "rotator":
-			direction += 2000 * delta
+		if get_count_in_group("mr_T") == 0:
+			var w = bullet.instance()
+			get_parent().add_child(w)
+			var pos = get_node("bullet_spawn_" + style).position
+			w.set_position(to_global(pos))
+			w.initialize(direction)
+			if style == "rotator":
+				direction += 2000 * delta
 	
 func _ready():
 	pass # Replace with function body.
@@ -90,5 +97,5 @@ func _process(delta):
 		shoot(delta)
 
 func _on_visibilitynot_screen_exited():
-	if position.x <= -30:
+	if position.x <= -10:
 		queue_free()
