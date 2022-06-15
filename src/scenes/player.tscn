@@ -128,11 +128,6 @@ shader_param/alpha = 1.0
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [ ExtResource( 24 ), ExtResource( 23 ), ExtResource( 25 ), ExtResource( 23 ) ],
-"loop": true,
-"name": "super_chomp",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ) ],
 "loop": true,
 "name": "unicorn_walking",
@@ -146,6 +141,11 @@ animations = [ {
 "frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 1 ), ExtResource( 3 ), ExtResource( 2 ) ],
 "loop": true,
 "name": "pony_walking",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 24 ), ExtResource( 23 ), ExtResource( 25 ), ExtResource( 23 ) ],
+"loop": true,
+"name": "super_chomp",
 "speed": 5.0
 } ]
 
@@ -167,13 +167,14 @@ modulate = Color( 1, 1, 1, 0.329412 )
 position = Vector2( 3, 14 )
 scale = Vector2( 0.833333, 0.833333 )
 frames = SubResource( 3 )
-frame = 3
+frame = 4
 playing = true
 
 [node name="sprite" type="AnimatedSprite" parent="."]
 material = SubResource( 6 )
 frames = SubResource( 2 )
 animation = "pony_walking"
+frame = 1
 playing = true
 
 [node name="collider" type="CollisionShape2D" parent="."]

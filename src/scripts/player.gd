@@ -14,8 +14,14 @@ var transformed_ttl = 0
 var total_transformed_ttl = 10
 var transformed_what = ""
 var parry_ttl = 0
+var parry_failed = false
+var parry_cooldown = 0
 var horse_of_fire = false
-var horse_of_fire_ttl = 0
+var horse_of_fire_line_MIN = 0.100
+var horse_of_fire_line_MAX = 2.353
+var horse_of_fire_ttl = horse_of_fire_line_MIN
+var horse_of_fire_line = horse_of_fire_line_MAX
+var horse_of_fire_line_dir = -1
 
 var shoot_cooldown = 0
 var total_shoot_cooldown = 0.1
@@ -152,28 +158,40 @@ func _physics_process(delta):
 		super_shoot_cooldown = total_super_shoot_cooldown
 		super_shoot_ttl = total_super_shoot_ttl
 		super_shoot = true
-	
+		
 	if horse_of_fire:
 		horse_of_fire_ttl -= 1 * delta
+		$sprite.material.set_shader_param("line_scale", horse_of_fire_line)
+		print(horse_of_fire_line)
+		horse_of_fire_line += 10 * horse_of_fire_line_dir * delta
+		if horse_of_fire_line <= horse_of_fire_line_MIN and horse_of_fire_line_dir == -1:
+			horse_of_fire_line_dir = 1
+		elif horse_of_fire_line > horse_of_fire_line_MAX and horse_of_fire_line_dir == 1:
+			horse_of_fire_line_dir = -1
+		
 		if horse_of_fire_ttl <= 0:
 			extra_speed = 0
 			$sprite.material.set_shader_param("dooutline", false)
+			horse_of_fire_line_dir = -1
+			horse_of_fire_line = 2.353
 			horse_of_fire_ttl = 0
 			horse_of_fire = false
+			
+	if parry_cooldown > 0:
+		parry_cooldown -= 1 * delta
 		
 	if !horse_of_fire and !transformed and parry_ttl <= 0 and hit_ttl <= 0:
-		if Input.is_action_pressed("parry" + str(player_number)):
-			parry_ttl = 0.2
-			$collider.disabled = true
-			$collider_chomp.disabled = false
+		if parry_cooldown <= 0 and Input.is_action_just_pressed("parry" + str(player_number)):
+			parry_cooldown = 1
+			parry_ttl = 0.25
+			parry_failed = false
 			
 	if parry_ttl > 0:
 		parry_ttl -= 1 * delta
 		$sprite.rotation_degrees -= 1000 * delta
 		if parry_ttl <= 0:
+			parry_failed = false
 			$sprite.rotation_degrees = 0
-			$collider.disabled = false
-			$collider_chomp.disabled = true
 			parry_ttl = 0
 	
 	if Input.is_action_pressed("down" + str(player_number)):
@@ -208,20 +226,34 @@ func _physics_process(delta):
 func success_parry():
 	$sprite.material.set_shader_param("dooutline", true)
 	horse_of_fire = true
-	horse_of_fire_ttl = 6
-	extra_speed = 100
+	horse_of_fire_ttl = 15
+	extra_speed = 150
+	
+func parryOK(pos):
+	if position.distance_to(pos) <= 20 and parry_ttl > 0:
+		get_parent().get_node("parry_stop").execute_event("pause")
+		return true
+	else:
+#		print("FAILED--")
+#		print(parry_ttl)
+#		print(position.distance_to(pos))
+#		print("--FAILED")
+		parry_failed = true
+		return false
 
 func _on_player_area_entered(area):
 	if area.objettype == "enemybullet":
-		if parry_ttl > 0:
-			area.queue_free()
-			success_parry()
+		if parryOK(area.position):
+			if !parry_failed:
+				area.queue_free()
+				success_parry()
 		
 	elif area.objettype == "enemy":
 		if transformed:
 			area.queue_free()
 		else:
-			if parry_ttl > 0:
-				success_parry()
+			if parryOK(area.position):
+				if !parry_failed:
+					success_parry()
 			else:
 				hit()
