@@ -162,7 +162,6 @@ func _physics_process(delta):
 	if horse_of_fire:
 		horse_of_fire_ttl -= 1 * delta
 		$sprite.material.set_shader_param("line_scale", horse_of_fire_line)
-		print(horse_of_fire_line)
 		horse_of_fire_line += 10 * horse_of_fire_line_dir * delta
 		if horse_of_fire_line <= horse_of_fire_line_MIN and horse_of_fire_line_dir == -1:
 			horse_of_fire_line_dir = 1
@@ -170,6 +169,7 @@ func _physics_process(delta):
 			horse_of_fire_line_dir = -1
 		
 		if horse_of_fire_ttl <= 0:
+			Engine.time_scale = 1
 			extra_speed = 0
 			$sprite.material.set_shader_param("dooutline", false)
 			horse_of_fire_line_dir = -1
@@ -232,12 +232,9 @@ func success_parry():
 func parryOK(pos):
 	if position.distance_to(pos) <= 20 and parry_ttl > 0:
 		get_parent().get_node("parry_stop").execute_event("pause")
+		Engine.time_scale = 0.5
 		return true
 	else:
-#		print("FAILED--")
-#		print(parry_ttl)
-#		print(position.distance_to(pos))
-#		print("--FAILED")
 		parry_failed = true
 		return false
 

@@ -1,5 +1,5 @@
 extends Area2D
-var speed = 300
+var speed = 150
 var objettype = "enemybullet"
 
 func initialize(rot):

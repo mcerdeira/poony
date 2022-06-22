@@ -9,7 +9,7 @@ func _process(delta):
 
 func execute_event(event):
 	if event == "pause":
-		stop = 2
+		stop = 0.3
 		get_tree().paused = true
 		show()
 	elif event == "up_pause":

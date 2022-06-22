@@ -26,7 +26,7 @@ func initialize():
 		add_child(w)
 		w.initialize(players[i].type, players[i].player_number, players[i].player_name)
 
-func _input(event):
+func _input(event):	
 	if event.is_action_pressed("toggle_fullscreen"):
 		OS.window_fullscreen = !OS.window_fullscreen
 	if event.is_action_pressed("quit_game"):
