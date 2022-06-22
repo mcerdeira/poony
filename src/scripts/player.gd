@@ -84,6 +84,12 @@ func shoot():
 		var pos = get_node("pos_" + type).position
 		w.set_position(to_global(pos))
 		w.init_normal(face_dir, type)
+		
+func rotation_range():
+	if round($sprite.rotation_degrees) in range(-145.00, -33.00):
+		return true
+	else:
+		return false
 	
 func supershoot():
 	if !transformed:
@@ -160,6 +166,7 @@ func _physics_process(delta):
 		super_shoot = true
 		
 	if horse_of_fire:
+		$slash.visible = false
 		horse_of_fire_ttl -= 1 * delta
 		$sprite.material.set_shader_param("line_scale", horse_of_fire_line)
 		horse_of_fire_line += 10 * horse_of_fire_line_dir * delta
@@ -189,7 +196,20 @@ func _physics_process(delta):
 	if parry_ttl > 0:
 		parry_ttl -= 1 * delta
 		$sprite.rotation_degrees -= 1000 * delta
+		
+		if !horse_of_fire:
+			if rotation_range():
+				$sprite.material.set_shader_param("line_scale", 1)
+				$sprite.material.set_shader_param("dooutline", true)
+				$slash.visible = true
+			else:
+				$sprite.material.set_shader_param("dooutline", false)
+				$slash.visible = false
+		
 		if parry_ttl <= 0:
+			if !horse_of_fire:
+				$sprite.material.set_shader_param("dooutline", false)
+				$slash.visible = false
 			parry_failed = false
 			$sprite.rotation_degrees = 0
 			parry_ttl = 0
@@ -230,7 +250,7 @@ func success_parry():
 	extra_speed = 150
 	
 func parryOK(pos):
-	if position.distance_to(pos) <= 20 and parry_ttl > 0:
+	if rotation_range() and position.distance_to(pos) <= 20 and parry_ttl > 0:
 		get_parent().get_node("parry_stop").execute_event("pause")
 		Engine.time_scale = 0.5
 		return true

@@ -20,7 +20,7 @@ func _on_enemy_bullet_area_entered(area):
 		if area.parry_ttl <= 0:
 			area.hit()
 			queue_free()
-		elif area.parry_ttl > 0 and position.distance_to(area.position) <= 20:
+		elif area.rotation_range() and area.parry_ttl > 0 and position.distance_to(area.position) <= 20:
 			queue_free()
 			
 		
